@@ -7,26 +7,117 @@ class App extends Component {
     this.setup();
   }
   setup() {
-    let grid = document.getElementsByClassName("grid"),
-      x,
-      y;
+    let grid = document.getElementById("grid");
+    let evolveBtn = document.getElementsByClassName("control-btns");
+    let xMax = 20;
+    let yMax = 20;
+    let nextGrid = Array(xMax)
+      .fill(0)
+      .map(() => Array(yMax).fill(0));
+    let condition = true;
+    let automation;
+    evolveBtn[0].addEventListener("click", function() {
+      console.log("preset");
+    });
+    evolveBtn[1].addEventListener("click", function() {
+      console.log("evolve");
+      buildNextGrid();
+      updateGrid();
+    });
+    evolveBtn[2].addEventListener("click", function() {
+      if (condition) {
+        automation = window.setInterval(function() {
+          buildNextGrid();
+          updateGrid();
+        }, 100);
+        condition = false;
+      } else {
+        clearInterval(automation);
+        condition = true;
+      }
+    });
+    evolveBtn[3].addEventListener("click", function() {
+      clearInterval(automation);
+      condition = true;
+      for (var rowIndex = 0; rowIndex < xMax; rowIndex++) {
+        for (var cellIndex = 0; cellIndex < yMax; cellIndex++) {
+          grid.rows[rowIndex].cells[cellIndex].style.backgroundColor = "white";
+          nextGrid[rowIndex][cellIndex] = 0;
+        }
+      }
+    });
     function addTdListeners(xMax, yMax) {
-      for (var i = 0; i < xMax; i++) {
-        for (var j = 0; j < yMax; j++) {
-          grid[0].rows[i].cells[j].addEventListener("click", function() {
-            x = this.parentElement.rowIndex;
-            y = this.cellIndex;
-            console.log(x + ":" + y);
-            if (this.style.backgroundColor == "black") {
-              this.style.backgroundColor = "white";
-            } else {
-              this.style.backgroundColor = "black";
+      for (var rowIndex = 0; rowIndex < xMax; rowIndex++) {
+        for (var cellIndex = 0; cellIndex < yMax; cellIndex++) {
+          grid.rows[rowIndex].cells[cellIndex].addEventListener(
+            "click",
+            function() {
+              toggleMouse(this);
             }
-          });
+          );
         }
       }
     }
-
+    function toggleMouse(elem) {
+      if (elem.style.backgroundColor == "black") {
+        elem.style.backgroundColor = "white";
+      } else {
+        elem.style.backgroundColor = "black";
+      }
+    }
+    function countNeighbors(grid, y, x) {
+      let sum = 0;
+      for (var rowIndex = -1; rowIndex < 2; rowIndex++) {
+        for (var cellIndex = -1; cellIndex < 2; cellIndex++) {
+          if (
+            grid.rows[rowIndex + y].cells[cellIndex + x].style
+              .backgroundColor == "black"
+          ) {
+            sum++;
+          }
+        }
+      }
+      if (grid.rows[y].cells[x].style.backgroundColor == "black") {
+        sum--;
+      }
+      return sum;
+    }
+    function buildNextGrid() {
+      let neighbors = 0;
+      for (var rowIndex = 1; rowIndex < xMax - 1; rowIndex++) {
+        for (var cellIndex = 1; cellIndex < yMax - 1; cellIndex++) {
+          neighbors = countNeighbors(grid, rowIndex, cellIndex);
+          if (
+            grid.rows[rowIndex].cells[cellIndex].style.backgroundColor ==
+            "black"
+          ) {
+            if (neighbors <= 1 || neighbors >= 4) {
+              nextGrid[rowIndex][cellIndex] = 0;
+            }
+            if (neighbors == 2 || neighbors == 3) {
+              nextGrid[rowIndex][cellIndex] = 1;
+            }
+          } else {
+            if (neighbors == 3) {
+              nextGrid[rowIndex][cellIndex] = 1;
+            }
+          }
+        }
+      }
+    }
+    function updateGrid() {
+      for (var rowIndex = 1; rowIndex < xMax - 1; rowIndex++) {
+        for (var cellIndex = 1; cellIndex < yMax - 1; cellIndex++) {
+          if (nextGrid[rowIndex][cellIndex] == 1) {
+            grid.rows[rowIndex].cells[cellIndex].style.backgroundColor =
+              "black";
+          } else {
+            grid.rows[rowIndex].cells[cellIndex].style.backgroundColor =
+              "white";
+          }
+        }
+      }
+    }
     addTdListeners(20, 20);
   }
   render() {
@@ -52,7 +143,7 @@ class App extends Component {
         </section>
         <section className="grid-pannel right">
           <div className="content">
-            <table className="grid">
+            <table id="grid">
               <tbody>
                 <tr>
                   <td> </td>
