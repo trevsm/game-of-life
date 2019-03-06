@@ -57,3 +57,10 @@ section {
     }
   }
 }
+tbody > tr:last-of-type > td,
+tbody > tr:first-of-type > td,
+tr > td:last-of-type,
+tr > td:first-of-type {
+  background-color: black !important;
+  display: none;
+}
