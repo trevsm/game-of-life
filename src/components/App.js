@@ -16,11 +16,31 @@ class App extends Component {
     let nextGrid = Array(xMax)
       .fill(0)
       .map(() => Array(yMax).fill(0));
+
     let condition = true;
     let toggle = true;
     let automation;
     controlBtns[0].addEventListener("click", function() {
       console.log("preset");
+
+      for (var i = 6; i < 16; i++) {
+        grid.rows[5].cells[i].style.backgroundColor = "black";
+      }
+      for (var i = 14; i < 16; i++) {
+        for (var j = 3; j < 5; j++) {
+          grid.rows[i].cells[j].style.backgroundColor = "black";
+        }
+      }
+      for (var i = 16; i < 18; i++) {
+        for (var j = 5; j < 7; j++) {
+          grid.rows[i].cells[j].style.backgroundColor = "black";
+        }
+      }
+      grid.rows[11].cells[11].style.backgroundColor = "black";
+      grid.rows[12].cells[12].style.backgroundColor = "black";
+      grid.rows[11].cells[13].style.backgroundColor = "black";
+      grid.rows[12].cells[13].style.backgroundColor = "black";
+      grid.rows[13].cells[12].style.backgroundColor = "black";
     });
     controlBtns[1].addEventListener("click", function() {
       console.log("evolve");
@@ -30,7 +50,7 @@ class App extends Component {
     controlBtns[2].addEventListener("click", function() {
       if (condition) {
         automation = window.setInterval(function() {
-          toggleBackgroundColor(controlBtns[2]);
+          toggleColor(controlBtns[2]);
           buildNextGrid();
           updateGrid();
         }, 500);
@@ -40,9 +60,11 @@ class App extends Component {
         clearInterval(automation);
         condition = true;
       }
+      console.log(condition);
     });
     controlBtns[3].addEventListener("click", function() {
       clearInterval(automation);
+      controlBtns[2].style.color = "black"; //small bug fix
       condition = true;
       for (var rowIndex = 0; rowIndex < xMax; rowIndex++) {
         for (var cellIndex = 0; cellIndex < yMax; cellIndex++) {
@@ -51,7 +73,7 @@ class App extends Component {
         }
       }
     });
-    function toggleBackgroundColor(elem) {
+    function toggleColor(elem) {
       if (toggle) {
         elem.style.color = "blue";
         toggle = false;
@@ -81,10 +103,10 @@ class App extends Component {
     }
     function countNeighbors(grid, y, x) {
       let sum = 0;
-      for (var rowIndex = -1; rowIndex < 2; rowIndex++) {
-        for (var cellIndex = -1; cellIndex < 2; cellIndex++) {
+      for (var rowIndex = -1; rowIndex <= 1; rowIndex++) {
+        for (var cellIndex = -1; cellIndex <= 1; cellIndex++) {
           if (
-            grid.rows[rowIndex + y].cells[cellIndex + x].style
+            grid.rows[y + rowIndex].cells[x + cellIndex].style
               .backgroundColor == "black"
           ) {
             sum++;
@@ -105,7 +127,7 @@ class App extends Component {
             grid.rows[rowIndex].cells[cellIndex].style.backgroundColor ==
             "black"
           ) {
-            if (neighbors <= 1 || neighbors >= 4) {
+            if (neighbors < 2 || neighbors >= 4) {
               nextGrid[rowIndex][cellIndex] = 0;
             }
             if (neighbors == 2 || neighbors == 3) {
