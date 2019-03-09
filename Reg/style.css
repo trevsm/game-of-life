@@ -1,0 +1,61 @@
+/* **********General************* */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #d9d9d9;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+section {
+  height: 100vh;
+  width: 50%;
+}
+.content {
+  transform: translateY(50%);
+  margin: 0 auto;
+  width: fit-content;
+}
+.black {
+  background-color: black;
+}
+/* **********control-pannel************* */
+
+.control-pannel {
+  background-color: lightblue;
+}
+.control-pannel .content {
+  width: 50%;
+}
+
+/* **********Grid-pannel************* */
+table {
+  border-collapse: collapse;
+}
+.grid-pannel {
+  background-color: lightgreen;
+}
+td {
+  width: 20px;
+  height: 20px;
+  border: 2px solid black;
+  background-color: white;
+}
+tbody > tr:last-of-type > td,
+tbody > tr:first-of-type > td,
+tr > td:last-of-type,
+tr > td:first-of-type {
+  background-color: black !important;
+  display: none;
+}
