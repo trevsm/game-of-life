@@ -9,19 +9,15 @@ class App extends Component {
   setup() {
     const color = "black";
     const inverse = "white";
-    let xMax = 20;
-    let yMax = 20;
     let grid = document.getElementById("grid");
-
-    let nextGrid = Array(xMax)
+    var rows;
+    var cell;
+    let nextGrid = Array(this.state.size)
       .fill(0)
       .map(function() {
-        return Array(yMax).fill(0);
+        return Array(this.state.size).fill(0);
       });
-
-    let condition = true;
-    let toggle = true;
-    let automation;
+    let interval;
 
     function countNeighbors(grid, y, x) {
       let sum = 0;
@@ -42,8 +38,8 @@ class App extends Component {
     }
     function buildNextGrid() {
       let neighbors = 0;
-      for (var rowIndex = 1; rowIndex < xMax - 1; rowIndex++) {
-        for (var cellIndex = 1; cellIndex < yMax - 1; cellIndex++) {
+      for (var rowIndex = 1; rowIndex < this.state.size; rowIndex++) {
+        for (var cellIndex = 1; cellIndex < this.state.size; cellIndex++) {
           neighbors = countNeighbors(grid, rowIndex, cellIndex);
           if (
             grid.rows[rowIndex].cells[cellIndex].style.backgroundColor == color
@@ -63,8 +59,8 @@ class App extends Component {
       }
     }
     function updateGrid() {
-      for (var rowIndex = 1; rowIndex < xMax - 1; rowIndex++) {
-        for (var cellIndex = 1; cellIndex < yMax - 1; cellIndex++) {
+      for (var rowIndex = 1; rowIndex < this.state.size; rowIndex++) {
+        for (var cellIndex = 1; cellIndex < this.state.size; cellIndex++) {
           if (nextGrid[rowIndex][cellIndex] == 1) {
             grid.rows[rowIndex].cells[cellIndex].style.backgroundColor = color;
           } else {
@@ -76,9 +72,9 @@ class App extends Component {
       }
     }
     function createTable() {
-      let rows = [];
+      rows = [];
       for (var rowIndex = 0; rowIndex < this.state.size; rowIndex++) {
-        let cell = [];
+        cell = [];
         for (var cellIndex = 0; cellIndex < this.state.size; cellIndex++) {
           cell.push(<td />);
         }
@@ -95,12 +91,12 @@ class App extends Component {
       grid.rows[2].cells[2].style.backgroundColor = color;
       grid.rows[2].cells[3].style.backgroundColor = color;
       //set automated life-cycle
-      automation = window.setInterval(function() {
+      interval = window.setInterval(function() {
         buildNextGrid();
         updateGrid();
       }, 500);
     }
-    run(); // create table, darken cells, start automation
+    run(); // create table, darken cells, start interval
   }
   render() {
     return (
