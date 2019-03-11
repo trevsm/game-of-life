@@ -1,16 +1,13 @@
 import React, { Component } from "react";
 import "../styles/App.scss";
 
-
-const judge = (game, newGame, size) => {
+function judge(game, newGame, size) {
   let neighbors = 0;
 
-  for (var i = 1; i < size-1; i++) {
-    for (var j = 1; j < size-1; j++) {
+  for (var i = 1; i < size - 1; i++) {
+    for (var j = 1; j < size - 1; j++) {
       neighbors = countNeighbors(game, i, j);
-      if (
-        game[i][j] == true
-      ) {
+      if (game[i][j] == true) {
         if (neighbors < 2 || neighbors >= 4) {
           newGame[i][j] = false;
         }
@@ -29,16 +26,16 @@ let countNeighbors = (game, yPos, xPos) => {
   let sum = 0;
   for (var i = -1; i <= 1; i++) {
     for (var j = -1; j <= 1; j++) {
-        if (game[yPos + i][xPos + j] == true) {
-          sum ++;
-        }
+      if (game[yPos + i][xPos + j] == true) {
+        sum++;
+      }
     }
   }
   if (game[yPos][xPos] == true) {
     sum--;
   }
   return sum;
-}
+};
 
 class App extends Component {
   constructor(props) {
@@ -58,7 +55,7 @@ class App extends Component {
 
     //inital state for testing
     for (var i = 0; i < 10; i++) {
-      game[5][5+i] = true;
+      game[5][5 + i] = true;
     }
 
     // game[5][5] = true;
@@ -66,7 +63,8 @@ class App extends Component {
     // game[5][7] = true;
 
     this.state = {
-      game, size
+      game,
+      size
     };
 
     // use bind to force correct 'this' which has this.state
@@ -78,7 +76,7 @@ class App extends Component {
   }
 
   tick() {
-    const { game, size} = this.state; // current game state
+    const { game, size } = this.state; // current game state
     const newGame = [];
 
     for (let i = 0; i < size; i++) {
@@ -89,18 +87,15 @@ class App extends Component {
       newGame.push(row);
     }
 
-
     // look at each cell in current game state and calculate if needs to die or live...
     judge(game, newGame, size);
     // update newGame with next game state
-
-
 
     // game logic...
 
     this.setState({
       game: newGame
-    })
+    });
   }
 
   render() {
@@ -112,7 +107,7 @@ class App extends Component {
           {game.map(row => (
             <tr>
               {row.map(cell => (
-                <td className={cell ? 'living' : ''}></td>
+                <td className={cell ? "living" : ""} />
               ))}
             </tr>
           ))}
