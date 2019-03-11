@@ -29,7 +29,9 @@ let countNeighbors = (game, yPos, xPos) => {
   let sum = 0;
   for (var i = -1; i <= 1; i++) {
     for (var j = -1; j <= 1; j++) {
-        game[yPos + i][xPos + j] == false ? sum ++ : sum--;
+        if (game[yPos + i][xPos + j] == true) {
+          sum ++;
+        }
     }
   }
   if (game[yPos][xPos] == true) {
@@ -54,14 +56,14 @@ class App extends Component {
       game.push(row);
     }
 
-    // inital state for testing
-    // for (var i = 0; i < 10; i++) {
-    //   game[5][5+i] = true;
-    // }
+    //inital state for testing
+    for (var i = 0; i < 10; i++) {
+      game[5][5+i] = true;
+    }
 
-    game[5][5] = true;
-    game[5][6] = true;
-    game[5][7] = true;
+    // game[5][5] = true;
+    // game[5][6] = true;
+    // game[5][7] = true;
 
     this.state = {
       game, size
@@ -69,11 +71,10 @@ class App extends Component {
 
     // use bind to force correct 'this' which has this.state
     this.tick = this.tick.bind(this);
-    //this.size = this.size.bind(this);
   }
 
   componentDidMount() {
-    window.setInterval(this.tick, 1000);
+    window.setInterval(this.tick, 200);
   }
 
   tick() {
