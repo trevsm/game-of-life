@@ -62,7 +62,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    window.setInterval(this.tick, 50);
+    window.setInterval(this.tick, 60);
   }
 
   tick() {
@@ -89,7 +89,6 @@ class App extends Component {
   }
 
   render() {
-    // const game = this.state.game;
     const { game } = this.state;
     return (
       <table>
