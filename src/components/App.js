@@ -41,38 +41,28 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    const size = 20;
+    const size = 100;
     const game = [];
 
     // create empty game
     for (let i = 0; i < size; i++) {
       const row = [];
       for (let j = 0; j < size; j++) {
-        row.push(false);
+        row.push(!Math.round(Math.random()));
       }
       game.push(row);
     }
-
-    //inital state for testing
-    for (var i = 0; i < 10; i++) {
-      game[5][5 + i] = true;
-    }
-
-    // game[5][5] = true;
-    // game[5][6] = true;
-    // game[5][7] = true;
 
     this.state = {
       game,
       size
     };
 
-    // use bind to force correct 'this' which has this.state
     this.tick = this.tick.bind(this);
   }
 
   componentDidMount() {
-    window.setInterval(this.tick, 200);
+    window.setInterval(this.tick, 50);
   }
 
   tick() {
